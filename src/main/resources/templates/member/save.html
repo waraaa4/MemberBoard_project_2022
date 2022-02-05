@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        const emailCheck = () => {
+            const inputEmail = document.getElementById("memberEmail").value
+            const checkResult = document.getElementById("checkResult")
+            const success = document.getElementById("success")
+            $.ajax({
+                type: "post",
+                url: "/member/emailCheck",
+                data: {memberEmail: inputEmail},
+                success: function () {
+                    checkResult.style.color="green"
+                    checkResult.innerHTML="사용가능한 이메일입니다"
+                    success.innerHTML="<input type='submit' value='회원가입'>"
+                },
+                error: function () {
+                    checkResult.style.color="red"
+                    checkResult.innerHTML="이미 있는 이메일입니다"
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<h2>save.html</h2>
+<form action="/member/save" method="post" th:object="${member}" enctype="multipart/form-data">
+    <input type="text" th:field="*{memberEmail}" placeholder="이메일">
+    <span id="checkResult"></span><br>
+    <input type="text" th:field="*{memberPassword}" placeholder="비밀번호"><br>
+    <input type="text" th:field="*{memberName}" placeholder="이름"><br>
+    <input type="text" th:field="*{memberPhone}" placeholder="전화번호"><br>
+    <input type="file" th:field="*{memberFile}">
+    <div id="success"></div>
+</form>
+    <button onclick="emailCheck()">이메일 중복체크</button>
+</body>
+</html>
